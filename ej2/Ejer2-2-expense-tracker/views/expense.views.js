@@ -12,6 +12,10 @@ class TransactionView {
     this.form = this.getElement('form');
     this.text = this.getElement('text');
     this.amount = this.getElement('amount');
+
+    this._temporaryAmountValue = "";
+    this._temporaryTextValue = "";
+    this._initLocalListeners();
   }
 
 
@@ -39,14 +43,15 @@ class TransactionView {
         const sign = transaction.amount < 0 ? '-' : '+';
       
         const item = document.createElement('li');
+        item.id = transaction.id;
       
         // Add class based on value
         item.classList.add(transaction.amount < 0 ? 'minus' : 'plus');
       
         item.innerHTML = `
-          ${transaction.text} <span>${sign}${Math.abs(
+        <span contenteditable="true" class="editable-text">${transaction.text}</span> <span contenteditable="true" class="editable">${sign}${Math.abs(
           transaction.amount
-        )}</span> <button id="${transaction.id}" class="delete-btn">x</button>`;
+        )}</span> <button class="delete-btn">x</button>`;
       
         document.getElementById('list').appendChild(item);
       }
@@ -90,9 +95,32 @@ class TransactionView {
   bindDeleteTransaction(handler) {
     this.list.addEventListener("click", event => {
       if (event.target.className === "delete-btn") {
-        const id = event.target.id;
+        const id = event.target.parentElement.id;
 
         handler(parseInt(id));
+      }
+    });
+  }
+
+  bindEditTransaction(handler) {
+    this.list.addEventListener("focusout", event => {
+      if (this._temporaryAmountValue || this._temporaryTextValue) {
+        const id = event.target.parentElement.id;
+
+        handler(parseInt(id), this._temporaryAmountValue != "" ? parseInt(this._temporaryAmountValue) : "", this._temporaryTextValue);
+        this._temporaryAmountValue = "";
+        this._temporaryTextValue = "";
+      }
+    });
+  }
+
+  _initLocalListeners() {
+    this.list.addEventListener("input", event => {
+      if (event.target.className === "editable") {
+        this._temporaryAmountValue = event.target.innerText;
+      }
+      if (event.target.className === "editable-text") {
+        this._temporaryTextValue = event.target.innerText;
       }
     });
   }

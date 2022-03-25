@@ -15,6 +15,7 @@ class TransactionController {
     this.service.bindTransactionsListChanged(this.onTransactionsListChanged);
     this.view.bindAddTransaction(this.handleAddTransaction);
     this.view.bindDeleteTransaction(this.handleDeleteTransaction);
+    this.view.bindEditTransaction(this.handleEditTransaction);
 
     // Display initial transactions
     this.onTransactionsListChanged(this.service.transactions); //init
@@ -30,6 +31,10 @@ class TransactionController {
 
   handleDeleteTransaction = id => {
     this.service.deleteTransaction(id);
+  };
+
+  handleEditTransaction = (id, transactionAmount, transactionText) => {
+    this.service.editTransaction(id, transactionAmount, transactionText);
   };
 
 }

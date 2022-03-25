@@ -1,0 +1,1 @@
+Al no utilizar fat-arrows, y al crear una nueva función se crea un nuevo contexto, por eso el this es undefined, ya que ahora el this se refiere a los atributos o funciones dentro de la nueva función (del nuevo contexto).

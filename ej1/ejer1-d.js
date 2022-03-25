@@ -28,7 +28,8 @@ const users = [
 (async () => {
   console.log('findOne success');
   console.log('findOne error');
-  Promise.all([findOne(users, { key: 'name', value: 'Carlos' }),  findOne(users, { key: 'name', value: 'Fermin' })]);
+  //utilizamos Promise.all(..) para que las promesas se ejecuten de manera paralela
+  await Promise.all([findOne(users, { key: 'name', value: 'Carlos' }),  findOne(users, { key: 'name', value: 'Fermin' })]);
 })();
 
 
